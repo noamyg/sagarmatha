@@ -1,0 +1,88 @@
+<div class="container pt-2 pt-md-0">
+  <span class="cursor-pointer text-success" [routerLink]="['new']" data-toggle="modal" data-target="#customerModal">
+    <a class="fa fa-plus-square" aria-hidden="true"></a> צור לקוח
+  </span>
+  <ul class="list-documents mb-3" role="grid">
+    <div class="row pt-4 pb-4 documents-header font-weight-bold" role="row" #tableTop>
+      <div class="col-1" role="row"></div>
+      <div class="col-7 col-md-8 col-lg-9">
+        <a id="sortBySubject" class="no-text-decoration" title="מיון לפי שם הלקוח" href="#" role="columnheader" (click)="sortCustomers('name')">שם הלקוח
+          <svg aria-describedby="sortBySubject" class="svg-arrow" [ngClass]="{'svg-arrow-active': sortBy === sortModesEnum.name}">
+            <path *ngIf="sortAscending[sortModesEnum.name]" d="M10 10l-1.5 1.5L5 7.75 1.5 11.5 0 10l5-5z"></path>
+            <path *ngIf="!sortAscending[sortModesEnum.name]" d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6z"></path>
+          </svg>
+        </a>
+      </div>
+      <div class="col-3 col-md-2 col-lg-2">
+        <a id="sortByDate" class="no-text-decoration" title="מיון לפי תאריך עדכון אחרון" href="#" role="columnheader" (click)="sortCustomers('date')">תאריך עדכון אחרון
+          <svg aria-describedby="sortByDate" class="svg-arrow" [ngClass]="{'svg-arrow-active': sortBy === sortModesEnum.date}">
+            <path *ngIf="sortAscending[sortModesEnum.date]" d="M10 10l-1.5 1.5L5 7.75 1.5 11.5 0 10l5-5z"></path>
+            <path *ngIf="!sortAscending[sortModesEnum.date]" d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6z"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+    
+    <li *ngFor="let customer of appService.customers.sort(sortF) | slice:(page*10):(page * 10 + 10)" class="row" [ngClass]="{'document-unread': !customer.lastUpdateDate}" role="row">
+      <div class="col-1" role="gridcell">
+        <span title="{{'לחץ לעריכת פרטי לקוח: %s' | sprintf:customer.text}}" class="cursor-pointer text-warning" [routerLink]="[customer.id, 'edit']" data-toggle="modal" data-target="#customerModal">
+          <a class="fa fa-pencil pr-2" aria-hidden="true"></a>
+        </span>
+        <span title="{{'לחץ למחיקת הלקוח: %s' | sprintf:customer.text}}" class="cursor-pointer text-danger" (click)="onCustomerRemoval(customer.id)">
+          <a class="fa fa-trash" aria-hidden="true"></a>
+        </span>
+      </div>
+      <div class="col-7 col-md-8 col-lg-9" role="gridcell">{{customer.text}}</div>
+      <div class="col-3 col-md-2 col-lg-1" role="gridcell">
+        <span class="center-this-vertically" title="תאריך עדכון אחרון">
+          {{customer.lastUpdateDate | date:'dd/MM/yyyy'}}
+        </span>
+      </div>
+      <div class="col-1" role="gridcell" data-toggle="modal" data-target="#customerModal">
+        <a class="float-right cursor-pointer center-this">
+        </a>
+      </div>
+    </li>
+    <li class="row d-block text-align-center" *ngIf="appService.customers.length == 0">אין לקוחות. אנא צור לקוח</li>
+  </ul>
+        
+  <nav aria-label="Page Navigation" *ngIf="appService.customers.length > 10">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [ngClass]="{'disabled': !page}">
+        <a class="page-link cursor-pointer" aria-label="Previous" (click)="page = page - 1">
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only">הקודם</span>
+        </a>
+      </li>
+      <li class="page-item" *ngFor="let n of arr(appService.customers.length / 10) | slice:(page ? page - 1 : page):page + 2" [ngClass]="{'active': page === n}">
+        <a class="page-link cursor-pointer" (click)="page = n;tableTop.scrollIntoView()">{{n+1}}</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': (page + 1) >= (appService.customers.length / 10)}">
+        <a class="page-link cursor-pointer" aria-label="Next" (click)="page = page + 1;tableTop.scrollIntoView()">
+          <span aria-hidden="true">&raquo;</span>
+          <span class="sr-only">הבא</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <router-outlet></router-outlet>
+</div>
+
+<div class="modal fade" id="customerModal" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-12">
+                  <button  type="button" class="close float-right" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true" style="font-size: 3rem;">&times;</span>
+                  </button>
+                  <router-outlet></router-outlet>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>

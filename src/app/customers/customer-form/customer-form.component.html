@@ -1,0 +1,39 @@
+<form #f="ngForm" (ngSubmit)="saveCustomer(f, $event)">
+    <div class="panel panel-default pb-4">פרטי הלקוח</div>
+    <div class="form-group container"> 
+    <fieldset>
+    <div class="row">
+      <div class="form-group pull-right pl-2">
+        <label for="text">שם הלקוח</label>
+        <input [(ngModel)]="customer.text" type="text" class="form-control" id="text" name="text" required>
+      </div>
+      <div class="form-group pull-right pl-2">
+        <label for="lastUpdateDate">תאריך עדכון אחרון</label>
+        <input disabled [ngModel]="customer.lastUpdateDate | date:'dd/MM/yyyy'" type="text" class="form-control" id="lastUpdateDate" name="lastUpdateDate">
+      </div>
+    </div>
+  </fieldset>
+  <table *ngIf="appService.getOrdersByCustomerId(customer.id).length > 0" class="table">
+      <thead>
+        <tr>
+          <th scope="col">פריט</th>
+          <th scope="col">כמות</th>
+          <th scope="col">עלות ליחידה</th>
+          <th scope="col">סך עלות</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of appService.getOrdersByCustomerId(customer.id)">
+          <td scope="row">{{order.text}}</td>
+          <td>{{order.amount}}</td>
+          <td>{{order.costPerUnit}}</td>
+          <td>{{order.amount * order.costPerUnit}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <span *ngIf="editMode && appService.getOrdersByCustomerId(customer.id)?.length == 0">אין הזמנות ללקוח זה</span>
+  </div>
+    <div class="form-group container float-left">
+      <button (click)="f.onSubmit()" [disabled]="!f.valid" type="button" id="send" data-toggle="modal" data-target="#customerModal" class="btn btn-primary"><i class="fa fa-save fa-lg">&nbsp;</i>שמור לקוח</button>
+    </div>
+  </form>

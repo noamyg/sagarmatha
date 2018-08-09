@@ -1,0 +1,32 @@
+<nav class="navbar navbar-custom fixed-top navbar-light bg-white d-inline">
+  <div class="mr-auto ml-5">
+    <a title="אתר הבית של Sagarmatha" [href]="'http://www.sag121.com'" class="navbar-brand ml-3" target="_blank">
+      <img
+        src="./assets/Images/HeaderLogo.png"
+        class="d-inline-block align-top no-text-decoration"
+        width="88">
+    </a>
+  </div>
+
+</nav>
+<div class="navbar-mb"></div>
+
+<div class="grey-background" role="main">
+    <div class="grey-background" role="main">
+      <div class="container tabs-container" role="navigation">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/customers']" routerLinkActive="active">לקוחות<div *ngIf="appService.customers" class="notifications-counter">{{appService.customers.length}}</div></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/orders']" routerLinkActive="active">הזמנות<div *ngIf="appService.orders" class="notifications-counter">{{appService.orders.length}}</div></a>
+          </li>
+        </ul>
+      </div>
+      <br>
+    <router-outlet></router-outlet>
+</div>
+
+<footer>
+  <img src="./assets/Images/FooterLogo.jpg" class="logo-footer mt-4"><br>  
+</footer>
