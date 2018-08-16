@@ -4,9 +4,9 @@
     <fieldset>
     <div class="row pb-2">
       <select [(ngModel)]="order.customer" id="customer" name="customer" class="form-control" required>
-          <option value="null" disabled selected="selected">בחר לקוח</option>
+          <option disabled value="null" selected>בחר לקוח</option>
           <option *ngFor="let customer of appService.customers" [ngValue]="customer">{{customer.text}}</option>
-        </select>
+      </select>
     </div>
     <div class="row">
       <div class="form-group pull-right pl-2">

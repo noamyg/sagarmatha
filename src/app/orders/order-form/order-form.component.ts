@@ -41,7 +41,7 @@ export class OrderFormComponent implements OnInit {
       }
     );
   }
-  
+
   saveOrder(formEl : NgForm, event){
     if (!this.editMode){
       this.appService.pushOrder(this.order);
